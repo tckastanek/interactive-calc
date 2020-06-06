@@ -1,12 +1,12 @@
 use rustyline::{error::ReadlineError, Editor};
 
-struct Parser {
-    input: String,
+struct Parser<'a> {
+    input: &'a str,
     tokens: Option<Vec<Token>>,
 }
 
-impl Parser {
-    pub fn new(input: String) -> Self {
+impl<'a> Parser<'a> {
+    pub fn new(input: &'a str) -> Self {
         Self {
             input,
             tokens: None,
@@ -92,17 +92,26 @@ impl Token {
 
 fn main() {
     let mut rl = Editor::<()>::new();
+    let mut result = None;
 
     loop {
-        let readline = rl.readline(">> ");
+        let readline = match result {
+            Some(result) => {
+                let prompt = format!(">> {} ", result);
+                rl.readline(&prompt)
+            }
+            None => rl.readline(">> "),
+        };
+        // let readline = rl.readline(">> ");
 
         match readline {
             Ok(line) => {
-                let parser = Parser::new(line);
+                let parser = Parser::new(&line);
 
-                let result = parser.tokenize().parse();
+                let res = parser.tokenize().parse();
+                result = Some(res);
 
-                println!("Line: {:#?}", result);
+                println!("{}", &line);
             }
             Err(ReadlineError::Interrupted) => {
                 eprintln!("CTRL-C");
