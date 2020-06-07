@@ -3,6 +3,7 @@ pub enum Token {
     Float(f32),
     Plus,
     Minus,
+    Divide,
 }
 
 impl Token {
@@ -14,6 +15,7 @@ impl Token {
             match input {
                 "+" => Token::Plus,
                 "-" => Token::Minus,
+                "/" => Token::Divide,
                 _ => unimplemented!(),
             }
         }
