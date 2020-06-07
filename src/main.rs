@@ -3,13 +3,15 @@ use rustyline::{error::ReadlineError, Editor};
 struct Parser<'a> {
     input: &'a str,
     tokens: Option<Vec<Token>>,
+    prev_result: Option<f32>,
 }
 
 impl<'a> Parser<'a> {
-    pub fn new(input: &'a str) -> Self {
+    pub fn new(input: &'a str, prev_result: Option<f32>) -> Self {
         Self {
             input,
             tokens: None,
+            prev_result,
         }
     }
 
@@ -29,7 +31,10 @@ impl<'a> Parser<'a> {
 
     pub fn parse(self) -> f32 {
         if let Some(tokens) = self.tokens {
-            let mut lhs = None;
+            let mut lhs = match self.prev_result {
+                Some(float) => Some(float),
+                None => None,
+            };
             let mut op = None;
 
             for token in tokens {
@@ -47,7 +52,7 @@ impl<'a> Parser<'a> {
                             }
                             _ => unimplemented!(),
                         },
-                        (_, _) => unimplemented!(),
+                        (Some(_), None) => lhs = Some(float),
                     },
                     Token::Plus => match (lhs, &op) {
                         (Some(_), None) => op = Some(Token::Plus),
@@ -106,12 +111,16 @@ fn main() {
 
         match readline {
             Ok(line) => {
-                let parser = Parser::new(&line);
+                if line == "clear" {
+                    result = None;
+                } else {
+                    let parser = Parser::new(&line, result);
 
-                let res = parser.tokenize().parse();
-                result = Some(res);
+                    let res = parser.tokenize().parse();
+                    result = Some(res);
 
-                println!("{}", &line);
+                    println!("{}", &line);
+                }
             }
             Err(ReadlineError::Interrupted) => {
                 eprintln!("CTRL-C");
