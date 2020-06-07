@@ -103,6 +103,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "interactive-calc"
+version = "0.1.0"
+dependencies = [
+ "rustyline",
+]
+
+[[package]]
 name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -140,13 +147,6 @@ dependencies = [
  "cfg-if",
  "libc",
  "void",
-]
-
-[[package]]
-name = "quick-calc"
-version = "0.1.0"
-dependencies = [
- "rustyline",
 ]
 
 [[package]]

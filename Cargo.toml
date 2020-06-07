@@ -1,5 +1,5 @@
 [package]
-name = "quick-calc"
+name = "interactive-calc"
 version = "0.1.0"
 authors = ["Thomas Kastanek <28022361+tckastanek@users.noreply.github.com>"]
 edition = "2018"
