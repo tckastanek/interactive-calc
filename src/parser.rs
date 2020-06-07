@@ -53,6 +53,10 @@ impl<'a> Parser<'a> {
                                 lhs = Some(lhs_val / float);
                                 op = None;
                             }
+                            Token::Multiply => {
+                                lhs = Some(lhs_val * float);
+                                op = None;
+                            }
                             _ => unimplemented!(),
                         },
                         (Some(_), None) => lhs = Some(float),
@@ -67,6 +71,10 @@ impl<'a> Parser<'a> {
                     },
                     Token::Divide => match (lhs, &op) {
                         (Some(_), None) => op = Some(Token::Divide),
+                        (_, _) => unimplemented!(),
+                    },
+                    Token::Multiply => match (lhs, &op) {
+                        (Some(_), None) => op = Some(Token::Multiply),
                         (_, _) => unimplemented!(),
                     },
                 }

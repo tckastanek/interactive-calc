@@ -4,6 +4,7 @@ pub enum Token {
     Plus,
     Minus,
     Divide,
+    Multiply,
 }
 
 impl Token {
@@ -16,6 +17,7 @@ impl Token {
                 "+" => Token::Plus,
                 "-" => Token::Minus,
                 "/" => Token::Divide,
+                "*" => Token::Multiply,
                 _ => unimplemented!(),
             }
         }
